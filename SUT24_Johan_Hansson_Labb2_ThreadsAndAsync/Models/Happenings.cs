@@ -9,37 +9,32 @@ namespace SUT24_Johan_Hansson_Labb2_ThreadsAndAsync.Models
     public class Happenings
     {
         private static readonly Random random = new Random();
-        public void RaceHappening(Car car)
+        public async Task<int> RaceHappening(Car car)
         {
             int happening = random.Next(1, 51);
 
             if (happening == 1)
             {
                 Console.WriteLine($"Nu fick {car.Name} slut på bensin. Depåstoppet kommer kosta 15 sekunder");
-                Thread.Sleep(15000);
+                await Task.Delay(15000);
             }
-            else if(happening <= 3)
+            else if (happening <= 3)
             {
                 Console.WriteLine($"Ett däck exploderar för {car.Name}. Men teamet är snabba och löser detta på 10 sekunder.");
-                Thread.Sleep(10000);
+                await Task.Delay(15000);
             }
-            else if(happening <= 8)
+            else if (happening <= 8)
             {
                 Console.WriteLine($"En fågel har flugit in i {car.Name}. Det kommer ta 5 sekunder att få rutan ren.");
-                Thread.Sleep(5000);
+                await Task.Delay(5000);
             }
             else if (happening <= 18)
             {
                 car.Speed = Math.Max(car.Speed - 1, 1);
                 Console.WriteLine($"{car.Name} har problem där ute. Motorn krånglar så hastigheten har gått ner till {car.Speed} km/h.");
             }
+            return happening;
         }
-        public string Status(Car car)
-        {
-            lock (car.GetLockObject())
-            {
-                return $"{car.Name}: {car.Distance} m, {car.Speed} km/h.";
-            }
-        }
+
     }
 }
