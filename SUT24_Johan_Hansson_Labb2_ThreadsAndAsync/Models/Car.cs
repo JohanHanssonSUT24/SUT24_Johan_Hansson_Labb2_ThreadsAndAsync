@@ -13,8 +13,11 @@ namespace SUT24_Johan_Hansson_Labb2_ThreadsAndAsync.Models
         public double Speed { get; set; } = 120;
         public bool Finished { get; set; } = false;
 
+
         private static readonly Random random = new Random();
         private readonly object lockObject = new object();
+        private static readonly HashSet<int> distancePassed = new HashSet<int>();
+        private static readonly object distancePassedObject = new object();
 
         private readonly Happenings happenings;
 
@@ -26,7 +29,7 @@ namespace SUT24_Johan_Hansson_Labb2_ThreadsAndAsync.Models
 
         public async Task StartRace()
         {
-            Console.WriteLine($"Bilarna är iväg! Väldigt jämt mellan {Name}");
+            Console.WriteLine($"Bilarna är iväg!");
 
             DateTime raceTime = DateTime.Now;
             while (Distance < 5000)//***
@@ -36,10 +39,28 @@ namespace SUT24_Johan_Hansson_Labb2_ThreadsAndAsync.Models
                     Distance += (Speed * 1000 / 3600);
                 }
 
+                int kilometer = (int)(Distance / 1000) * 1000;
+
+                if (kilometer >= 1000 && kilometer <= 4000 && kilometer % 1000 == 0)
+                {
+                    lock (distancePassedObject)
+                    {
+                        if (!distancePassed.Contains(kilometer))
+                        {
+                            Console.WriteLine($"{Name} är först att passera {kilometer}m!");
+                            distancePassed.Add(kilometer);
+                        }
+                    }
+                }
+
                 if ((DateTime.Now - raceTime).TotalSeconds >= 10)
                 {
-                    int happening = await happenings.RaceHappening(this);
-                    Console.WriteLine($"Oj oj oj! Nu fick {Name} för {happening}");
+                    string happening = await happenings.RaceHappening(this);
+                    if (!string.IsNullOrWhiteSpace(happening))
+                    {
+                        Console.WriteLine($"Oj oj oj! Nu fick {Name} {happening}");
+                    }
+                    
                     raceTime = DateTime.Now;
                 }
 
