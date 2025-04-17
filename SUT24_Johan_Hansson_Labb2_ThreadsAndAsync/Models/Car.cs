@@ -29,8 +29,6 @@ namespace SUT24_Johan_Hansson_Labb2_ThreadsAndAsync.Models
 
         public async Task StartRace()
         {
-            Console.WriteLine($"Bilarna är iväg!");
-
             DateTime raceTime = DateTime.Now;
             while (Distance < 5000)//***
             {

@@ -22,20 +22,20 @@ namespace SUT24_Johan_Hansson_Labb2_ThreadsAndAsync.Models
             }
             else if (happening <= 3)
             {
-                description = "Ett däck exploderade! Men teamet är snabbt och löser detta på 10 sekunder.";
+                description = "problem! Ett däck exploderade! Men teamet är snabba och löser detta på 10 sekunder.";
                 //Console.WriteLine($"{car.Name} har lite problem. {description}");
                 await Task.Delay(10000);
             }
             else if (happening <= 8)
             {
-                description = "En fågel har flugit in i rutan! Hoppas den inte skadade sig men det blir 5 dyra sekunders tillägg.";
+                description = "en fågel i rutan! Hoppas den inte skadade sig men det blir 5 dyra sekunders tillägg.";
                 //Console.WriteLine($"Vad händer med {car.Name}? {description}");
                 await Task.Delay(5000);
             }
             else if (happening <= 18)
             {
                 car.Speed = Math.Max(car.Speed - 1, 1);
-                description = $"Motorn krånglar så hastigheten har gått ner till {car.Speed} km/h.";
+                description = $"motorproblem så hastigheten har gått ner till {car.Speed} km/h.";
                 //Console.WriteLine($"{car.Name} har problem där ute. {description}");
             }
            
