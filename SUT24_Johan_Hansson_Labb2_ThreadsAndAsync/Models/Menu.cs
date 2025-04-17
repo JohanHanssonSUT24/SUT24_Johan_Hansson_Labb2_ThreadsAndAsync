@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace SUT24_Johan_Hansson_Labb2_ThreadsAndAsync.Models
 {
     internal class Menu
-    {
+    {   //Menu to choose how many cars and give them names
         public List<Car> CreateCars()
         {
             var cars = new List<Car>();
@@ -35,11 +35,11 @@ namespace SUT24_Johan_Hansson_Labb2_ThreadsAndAsync.Models
             }
             return cars;
         }
-        public async Task StartRace()
+        public async Task StartRace() //Method to be able to start race from menu-class
         {
             var cars = CreateCars();
             var race = new Race(cars);
-            await race.StartRace();
+            await race.StartRace(); //Start async race
         }
     }
 }
