@@ -18,6 +18,7 @@ namespace SUT24_Johan_Hansson_Labb2_ThreadsAndAsync.Models
 
         public async Task StartRace()
         {
+            Console.WriteLine("Bilarna är iväg!!!");
             List<Task> tasks = new List<Task>();
             foreach (var car in cars)
             {

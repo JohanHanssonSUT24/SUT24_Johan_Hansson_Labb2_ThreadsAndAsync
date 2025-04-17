@@ -10,7 +10,7 @@ namespace SUT24_Johan_Hansson_Labb2_ThreadsAndAsync
             var cars = menu.CreateCars();
 
             var race = new Race(cars);
-            await race.StartRace();
+            await race.StartRace();           
         }
     }
 }
