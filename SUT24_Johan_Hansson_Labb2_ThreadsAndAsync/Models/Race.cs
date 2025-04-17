@@ -11,15 +11,15 @@ namespace SUT24_Johan_Hansson_Labb2_ThreadsAndAsync.Models
         private List<Car> cars;
         private bool raceCompleted = false;
 
-        public Race(List<Car> cars)
+        public Race(List<Car> cars)//List of cars in race
         {
             this.cars = cars;
         }
 
-        public async Task StartRace()
+        public async Task StartRace()//Start async race
         {
             Console.WriteLine("Bilarna är iväg!!!");
-            List<Task> tasks = new List<Task>();
+            List<Task> tasks = new List<Task>();//List of tasks for each car's race
             foreach (var car in cars)
             {
                 var task = Task.Run(async () =>
@@ -30,7 +30,7 @@ namespace SUT24_Johan_Hansson_Labb2_ThreadsAndAsync.Models
                     {
                         if (!raceCompleted)
                         {
-                            raceCompleted = true;
+                            raceCompleted = true;//Race done, and the winner is
                             Console.WriteLine($"Vilken sanslös insats av {car.Name} som vinner detta otroligt spännande lopp!");
                         }
                     }
@@ -39,7 +39,7 @@ namespace SUT24_Johan_Hansson_Labb2_ThreadsAndAsync.Models
             }
             _ = Task.Run(() =>
             {
-                while (!raceCompleted)
+                while (!raceCompleted)//If user presses Enter or types status, show details of the car's status
                 {
                     var input = Console.ReadLine();
                     if (input == "" || input.ToLower() == "status")
@@ -51,7 +51,7 @@ namespace SUT24_Johan_Hansson_Labb2_ThreadsAndAsync.Models
                     }
                 }
             });
-            await Task.WhenAll(tasks);
+            await Task.WhenAll(tasks);//Wait until all car's have finished
         }
     }
 }

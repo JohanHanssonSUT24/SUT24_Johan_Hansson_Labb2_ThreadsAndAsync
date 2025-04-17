@@ -14,12 +14,11 @@ namespace SUT24_Johan_Hansson_Labb2_ThreadsAndAsync.Models
         public bool Finished { get; set; } = false;
 
 
-        private static readonly Random random = new Random();
-        private readonly object lockObject = new object();
-        private static readonly HashSet<int> distancePassed = new HashSet<int>();
-        private static readonly object distancePassedObject = new object();
+        private readonly object lockObject = new object(); //Object to lock access to distance-data
+        private static readonly HashSet<int> distancePassed = new HashSet<int>();//Static list to keep check on every 1000 meters passed.
+        private static readonly object distancePassedObject = new object();//Lock access to distancePassed-data
 
-        private readonly Happenings happenings;
+        private readonly Happenings happenings; //Generating happenings during races
 
         public Car(string name)
         {
@@ -27,19 +26,19 @@ namespace SUT24_Johan_Hansson_Labb2_ThreadsAndAsync.Models
             happenings = new Happenings();
         }
 
-        public async Task StartRace()
+        public async Task StartRace()//Async method for race-logic
         {
-            DateTime raceTime = DateTime.Now;
-            while (Distance < 5000)//***
+            DateTime raceTime = DateTime.Now;//DateTime to keep track on time between happenings
+            while (Distance < 5000)//Lenght of race
             {
                 lock (lockObject)
                 {
-                    Distance += (Speed * 1000 / 3600);
+                    Distance += (Speed * 1000 / 3600); //Convert speed to meters per second
                 }
 
                 int kilometer = (int)(Distance / 1000) * 1000;
 
-                if (kilometer >= 1000 && kilometer <= 4000 && kilometer % 1000 == 0)
+                if (kilometer >= 1000 && kilometer <= 4000 && kilometer % 1000 == 0)//Function for checkpoints
                 {
                     lock (distancePassedObject)
                     {
@@ -51,9 +50,9 @@ namespace SUT24_Johan_Hansson_Labb2_ThreadsAndAsync.Models
                     }
                 }
 
-                if ((DateTime.Now - raceTime).TotalSeconds >= 10)
+                if ((DateTime.Now - raceTime).TotalSeconds >= 10)//Keep track on 10 sec intervall
                 {
-                    string happening = await happenings.RaceHappening(this);
+                    string happening = await happenings.RaceHappening(this);//Get happenings
                     if (!string.IsNullOrWhiteSpace(happening))
                     {
                         Console.WriteLine($"Oj oj oj! Nu fick {Name} {happening}");
@@ -65,13 +64,13 @@ namespace SUT24_Johan_Hansson_Labb2_ThreadsAndAsync.Models
                 await Task.Delay(1000);
             }
             Finished = true;
-            Console.WriteLine($"{Name} har gått i mål!!");
+            Console.WriteLine($"{Name} har gått i mål!!");//Create "finish line"
         }
-        public object GetLockObject()
+        public object GetLockObject()//Create method for returning lockObject
         {
             return lockObject;
         }
-        public string Status()
+        public string Status()//Show exact status for each car
         {
             lock (GetLockObject())
             {
